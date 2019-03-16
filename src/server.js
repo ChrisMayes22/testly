@@ -1,15 +1,15 @@
-const path = require('path');
-const createError = require('http-errors');
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const helmet = require('helmet');
-const mongoose = require('mongoose');
-const cookieSession = require('cookie-session');
-const passport = require('passport');
-const keys = require('./config/keys');
-require('./models/users');
-require('./services/passport');
+const path            = require('path');
+const createError     = require('http-errors');
+const express         = require('express');
+const cookieParser    = require('cookie-parser');
+const logger          = require('morgan');
+const helmet          = require('helmet');
+const mongoose        = require('mongoose');
+const cookieSession   = require('cookie-session');
+const passport        = require('passport');
+const keys            = require('./config/keys');
+                        require('./models/users');
+                        require('./services/passport');
 
 const app = express();
 app.use(helmet());

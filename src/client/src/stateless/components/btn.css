@@ -1,0 +1,70 @@
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    100% {
+        opacity: 100;
+        transform: translate(0);
+    }
+}
+
+.btn,
+.btn:link,
+.btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.6rem 3.1rem;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all .2;
+    position: relative;
+    font-size: 1.6rem;
+    width: 73rem;
+    height: 6rem;
+    padding-top: 1.8rem;
+    font-size: 1.5rem;
+    margin-top: 4rem;
+    letter-spacing: 0.3rem;
+}
+
+.btn:hover {
+    cursor: pointer;
+    transform: translateY(-0.3rem);
+    box-shadow: 0 .2rem 2rem rgba(0,0,0,.3)
+}
+
+.btn:active {
+    cursor: pointer;
+    transform: translateY(-0.1rem);
+    box-shadow: 0 .2rem 1rem rgba(0,0,0,.4)
+}
+
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all 0.4s;
+}
+
+.btn--white {
+    background-color: #FDFDFD;
+    color: #191514;
+    animation: moveInBottom 0.7s ease-in;
+}
+
+.btn--white::after {
+    background-color:#FDFDFD;
+}
+
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}

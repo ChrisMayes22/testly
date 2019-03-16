@@ -1,0 +1,54 @@
+@keyframes moveInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-3rem);
+    }
+
+    80% {
+        transform: translateX(0.3rem);
+    }
+
+    100% {
+        opacity: 100;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(3rem);
+    }
+
+    80% {
+        transform: translateX(-0.3rem);
+    }
+
+    100% {
+        opacity: 100;
+        transform: translate(0);
+    }
+}
+
+.mainHeader {
+    color: #FDFDFD;
+    text-transform: uppercase;
+    backface-visibility: hidden;
+    margin-bottom: 2rem;
+}
+
+.mainHeader_main {
+    display: block;
+    font-size: 3.2rem;
+    font-weight: 400;
+    letter-spacing: 1.3rem;
+    animation: moveInLeft 0.7s ease-out;
+}
+
+.mainHeader_sub {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: .59rem;
+    animation: moveInRight 0.7s ease-out;
+}
