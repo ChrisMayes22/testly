@@ -170,6 +170,12 @@ body {
     transition: all .2;
     position: relative;
     font-size: 1.6rem;
+    width: 73rem;
+    height: 6rem;
+    padding-top: 1.8rem;
+    font-size: 1.5rem;
+    margin-top: 4rem;
+    letter-spacing: 0.3rem;
 }
 
 .btn:hover {

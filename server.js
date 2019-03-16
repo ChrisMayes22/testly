@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 100,
-    keys: [keys.cookieKey]
+    keys: [keys.COOKIE_KEY]
   })
 )
 app.use(passport.initialize());
@@ -57,3 +57,5 @@ app.use(function(err, req, res, next) {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
+
+module.exports = app;
