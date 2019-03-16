@@ -6,8 +6,8 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'An id is required to create a user.']
     },
-    admin: { //used to authorize user / grant user privileges. 
-        type: Boolean,
+    role: { //used to authorize user / grant user privileges. 
+        type: String,
         required: [true, 'The user must be assigned an authorization level']
     }
 });

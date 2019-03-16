@@ -11,8 +11,7 @@ describe('HTTP Request Handling', function(){
                 .expect(200)
                 .end(done);
         });
-    })
-    
+    });
     it('When a GET request is made from non-authorized user to `/auth/google`, app redirects to Google sign in', function(done){
         request(app)
             .get('/auth/google')
