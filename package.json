@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "nodemon --exec mocha -R min",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "nodemon --exec mocha -R min"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -21,6 +24,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "concurrently": "^4.1.0",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "supertest": "^4.0.0"

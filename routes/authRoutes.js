@@ -14,7 +14,7 @@ module.exports = (app) => {
           if(user){
             res.render(user.admin ? 'admin' : 'user');  // Uses user's authorization level to render correct page.
           } else {
-            res.render('index');
+            res.render('index'); // If user is not found (ex if an invalid session is being used), render base page.
           }
         }).catch(err => {
           console.log('GOOGLE/CALLBACK ERR: ', err);
@@ -29,14 +29,6 @@ module.exports = (app) => {
   app.get('/auth/google/callback', passport.authenticate('google'), (req, res, next) => { // For future use, currently does nothing.
     res.redirect('/');
   });
-
-  app.get('/api/current_user', (req, res, next) => {
-    if(req.session.passport.user) {
-      res.json(req.session); // For testing purposes. Will only render if user is logged in.
-    } else {
-      res.send('ERR: You are not logged in.')
-    }
-  })
 
   app.get('/api/logout', (req, res, next) => {
     req.logout();
