@@ -4,12 +4,17 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     googleId: { //used to create / initially authenticate user. Comes from Google.
         type: String,
-        required: [true, 'An id is required to create a user.']
+        required: [true, 'A Google id is required to create a user.']
     },
-    role: { //used to authorize user / grant user privileges. 
+    username: {
         type: String,
-        required: [true, 'The user must be assigned an authorization level']
-    }
+        required: [true, 'The user must have a username']
+    },
+    roles: [{ //used to authorize user / grant user privileges. 
+        type: String
+    }]
 });
 
-mongoose.model('users', userSchema);
+const User = mongoose.model('users', userSchema);
+
+module.exports = User;

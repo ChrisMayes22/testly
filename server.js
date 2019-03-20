@@ -1,25 +1,24 @@
 const path            = require('path');
-const createError     = require('http-errors');
-const express         = require('express');
-const cookieParser    = require('cookie-parser');
-const logger          = require('morgan');
-const helmet          = require('helmet');
-const mongoose        = require('mongoose');
-const cookieSession   = require('cookie-session');
-const passport        = require('passport');
-const keys            = require('./config/keys');
+      createError     = require('http-errors');
+      express         = require('express');
+      cookieParser    = require('cookie-parser');
+      logger          = require('morgan');
+      helmet          = require('helmet');
+      cookieSession   = require('cookie-session');
+      passport        = require('passport');
+      mongoose        = require('./db/mongoose');
+      User            = require('./models/users');
+      keys            = require('./config/keys');
+      authRouter      = require('./routers/authRoutes');
                         require('./models/users');
                         require('./services/passport');
 
 const app = express();
 app.use(helmet());
 
-mongoose.connect(keys.MONGO_URI) //connects to MongoDB. Note: requests sent from an IP address I have not white-listed will fail.
-  .catch((err) => console.log(err));
+
 
 // view engine setup, body parsers
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -40,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session()); //NOTE: If your IP is not authorized to access my database, this will cause server to hang.
                              // To view site w/o database access, comment out this line.
 
-require('./routes/authRoutes')(app); // Imports routes
+app.use('/auth', authRouter)
 
 
 // error handlers
@@ -49,13 +48,16 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.send(`err: ${err.message}`);
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT);
+const PORT = process.env.PORTzz
+
+if(process.env.NODE_ENV !== 'test'){
+  app.listen(PORT);
+}
 
 module.exports = app;
