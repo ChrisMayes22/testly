@@ -3,7 +3,7 @@ const Question = require('../models/questions');
 
 module.exports = {
     async create(data) { //used in /services/passport.js 
-        const existingQuestion = await Question.findOne({ qId: data.qId });
+        const existingQuestion = await Question.findOne({ questionId: data.questionId });
         if(!existingQuestion) {
             const newQuestion = new Question(data);
             await newQuestion.save();
@@ -23,7 +23,7 @@ module.exports = {
             throw new Error('invalid answers type: should be object');
         }
         if(Object.keys(answers).length < 2){
-            throw new Error('invalid answers: must be at least 2 answers.')
+            throw new Error('invalid answers: must be at least 3 answers.')
         }
         await Question.findByIdAndUpdate(id, { $set: { answers }})
     },

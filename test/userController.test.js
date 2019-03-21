@@ -14,14 +14,11 @@ beforeEach(async function(){
 })
 
 describe('Test Setup', () => {
-    test('trivial', () => {
-        expect(2).toBe(2);
-    })
     test('test environment variables configured correctly', () => {
         expect(process.env.PORT).toBe('5000');
         expect(process.env.MONGO_URI).toBe('mongodb://127.0.0.1:27017/testly__TEST');
     });
-})
+});
 describe('User Controller RESTful operations', () => {
     describe('User creation', () => {
         test('When userController.create is passed a valid google profile, a new user is created', async () => {

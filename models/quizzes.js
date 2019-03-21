@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const includesPublic = value => value.includes('/public/');
-const hasEnoughKeys = obj => Object.keys(obj).length > 1;
+
+//TODO: Update user schema to include a dictionary of completed tests w/ scores and times.
 
 const questionSchema = new Schema({
-    questionId: {
+    quizId: {
         type: String,
         required: [true, 'Each question must have a question ID']
     },

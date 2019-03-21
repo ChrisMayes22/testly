@@ -22,7 +22,7 @@ describe('Question Controller RESTful operations', () => {
     describe('Question creation', () => {
         test('When questionController.createQuestion is passed a valid object, a new question is created', async () => {
             const question = {
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a : 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -39,7 +39,7 @@ describe('Question Controller RESTful operations', () => {
         });
         test('When questionController.createQuestion is passed object w/ inappropriate imgPath, it throws an error', async () => {
             const question = {
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: 'fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -47,9 +47,19 @@ describe('Question Controller RESTful operations', () => {
             }
             await expect(questionController.create(question)).rejects.toThrow();
         });
+        test('When questionController.createQuestion is passed object w/ inappropriate answers, it throws an error', async () => {
+            const question = {
+                questionId: 'question_id_99',
+                imgPath: '/public/fooQuestion.png',
+                answers: { a: 'a' },
+                correctAnswer: 'b',
+                text: 'foo-text'
+            }
+            await expect(questionController.create(question)).rejects.toThrow();
+        });
         test('When create method is passed an id, but that id already exists, the new id is not written to the database', async () => {
             const question = {
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -57,14 +67,14 @@ describe('Question Controller RESTful operations', () => {
             }
             await questionController.create(question);
             await questionController.create(question);
-            const found = await Question.find({ qId: question.qId });
+            const found = await Question.find({ questionId: question.questionId });
             expect(found.length).toBe(1);
         });
     });
     describe('Question deletion', () => {
         test('When questionController.delete is passed a valid id, the targetted user is deleted', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -79,7 +89,7 @@ describe('Question Controller RESTful operations', () => {
     describe('Question updates', () => {
         test('When questionController.changeImgPath is passed a valid id, old image is replaced w/ input', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -92,7 +102,7 @@ describe('Question Controller RESTful operations', () => {
         });
         test('When questionController.changeImgPath is not in public, method throws error', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -103,7 +113,7 @@ describe('Question Controller RESTful operations', () => {
         });
         test('When questionController.changeAnswers is passed a valid id, old answers replaced w/ input', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 4', e: 'e. 5' },
                 correctAnswer: 'b',
@@ -117,18 +127,29 @@ describe('Question Controller RESTful operations', () => {
         });
         test('When questionController.changeAnswers is passed a non-object, it throws an error', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 4', e: 'e. 5' },
                 correctAnswer: 'b',
                 text: 'foo-text'
             });
             await question.save();
-            await expect(questionController.changeAnswers('foo')).rejects.toThrow();
+            await expect(questionController.changeAnswers(question._id, 'foo')).rejects.toThrow();
+        });
+        test('When questionController.changeAnswers is passed less than 3 answer choices, it throws an error', async () => {
+            const question = new Question({
+                questionId: 'question_id_99',
+                imgPath: '/public/fooQuestion.png',
+                answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 4', e: 'e. 5' },
+                correctAnswer: 'b',
+                text: 'foo-text'
+            });
+            await question.save();
+            await expect(questionController.changeAnswers(question._id, { a: 'a. 2' })).rejects.toThrow();
         });
         test('When questionController.changeCorrect is passed a valid id, old correctAnswer replaced w/ input', async () => {
             const question = new Question({
-                qId: 'question_id_99',
+                questionId: 'question_id_99',
                 imgPath: '/public/fooQuestion.png',
                 answers: { a: 'a. 2', b: 'b. 3', c: 'c. 4', d: 'd. 7', e: 'e. 5' },
                 correctAnswer: 'b',
