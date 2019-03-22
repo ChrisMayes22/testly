@@ -2,7 +2,7 @@ const app = require('../server');
 const User = require('../models/users');
 const userController = require('../controllers/user-controller');
 
-beforeEach(async function(){
+afterEach(async function(){
     try{
         const user = await User.findOne({});
         if(user){
@@ -108,36 +108,3 @@ describe('User Controller RESTful operations', () => {
     })
 })
 
-
-// /*
-
-//     PLANS: Create a user controller that can maintain REST operations on user model.
-
-//     Endpoints: Create a user, update a user's permissions, delete a user
-
-// */
-
-// // describe('HTTP Request Handling', function(){
-// //     describe('When a GET request is made' , function(){
-//         // it('Given user is not authenticated, app responds with index.ejs', function(done){
-//         //     console.log('TEST ENV?', console.log(process.env.NODE_ENV));
-//         //     request(app)
-//         //         .get('/')
-//         //         .expect('Content-Type', /html/)
-//         //         .expect(200)
-//         //         .end(done);
-//         // });
-//     // });
-//     // test('When a GET request is made from non-authorized user to `/auth/google`, app redirects to Google sign in', function(done){
-//     //     console.log(process.env.NODE_ENV);
-//     //     request(app)
-//     //         .get('/auth/google')
-//     //         .expect(302)
-//     //         .expect(res => {
-//     //             console.log('CORRECT'. res.headers.location.match(/https:\/\/accounts.google.com/))
-//     //             console.log('INCORRECT', res.headers.location.match(/https:\/\/accounts.gogle.com/))
-//     //             expect(res.headers.location.match(/https:\/\/accounts.gogle.com/)).not.toBeNull;
-//     //         })
-//     //         .end(done);
-//     // });
-// // })

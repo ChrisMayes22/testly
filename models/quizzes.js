@@ -1,16 +1,29 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const includesPublic = str => str.includes('/public/');
+const hasEnoughKeys = obj => Object.keys(obj).length > 1;
+const arrIsNotEmpty = arr => arr.length > 0;
+const isGreaterThanZero = num => num > 0;
+const isValidAnswer = el => {
+    if(el.match(/[a-z]/) && el.length === 1){
+        return true;
+    }
+    return false;
+}
 
-//TODO: Update user schema to include a dictionary of completed tests w/ scores and times.
+// ^^^ validation functions
 
 const questionSchema = new Schema({
-    quizId: {
-        type: String,
-        required: [true, 'Each question must have a question ID']
+    questionId: {
+        type: Number,
+        trim: true,
+        required: [true, 'Each question must have a question ID'],
+        validate: [isGreaterThanZero, 'Each question must have an id (#) greater than 0.']
     },
     imgPath: {
         type: String,
+        trim: true,
         validate: [includesPublic, 'question image paths must be in the public directory']
     },
     answers: {
@@ -20,14 +33,35 @@ const questionSchema = new Schema({
     },
     correctAnswer: {
         type: String,
-        required: [true, 'Each question must have a specified correct answer']
+        trim: true,
+        required: [true, 'Each question must have a specified correct answer'],
+        validate: [isValidAnswer, 'correct answers should be a single latin lowercase character, most likely a-e.']
     },
     text: {
         type: String,
-        required: [true, 'Each question must text']
+        required: [true, 'Each question must contain text']
     }
 });
 
-const Question = mongoose.model('questions', questionSchema);
+const quizSchema = new Schema({
+    quizId: {
+        type: String,
+        trim: true,
+        required: [true, 'A quiz id is required.']
+    },
+    scoreScale: {
+        type: Object
+    },
+    timer: {
+        type: Number, // use minutes
+        validate: [isGreaterThanZero, 'The timer must be set to more than 0 minutes.']
+    },
+    questions: {
+        type: [questionSchema],
+        validate: [arrIsNotEmpty, 'A quiz must have at least one question.']
+    }
+});
 
-module.exports = Question;
+const Quiz = mongoose.model('Quiz', quizSchema);
+
+module.exports = Quiz;

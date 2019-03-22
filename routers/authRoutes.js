@@ -1,6 +1,6 @@
 const passport = require('../services/passport');
 const mongoose = require('mongoose');
-const User = mongoose.model('users');
+const User = mongoose.model('User');
 const express = require('express');
 const router = new express.Router();
 

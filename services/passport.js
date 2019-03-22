@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ADMIN_IDS } = require('../config/keys');
 const userController = require('../controllers/user-controller');
 
-const User = mongoose.model('users');
+const User = mongoose.model('User');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
