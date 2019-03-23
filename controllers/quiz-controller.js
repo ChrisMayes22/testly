@@ -4,13 +4,13 @@ const keys = require('../config/keys');
 
 module.exports = {
     async create(data) {
-            const existingQuiz = await Quiz.findOne({ quizId: data.quizId });
-            if(!existingQuiz) {
-                const newQuiz = new Quiz(data);
-                await newQuiz.save();
-                return newQuiz._id;
-            }
-            return existingQuiz._id;
+        const existingQuiz = await Quiz.findOne({ quizName: data.quizName });
+        if(!existingQuiz) {
+            const newQuiz = new Quiz(data);
+            await newQuiz.save();
+            return newQuiz._id;
+        }
+        return existingQuiz._id;
     },
     async delete(id) {
         await Quiz.findByIdAndDelete(id);
@@ -42,44 +42,46 @@ module.exports = {
         await quiz.save()
         return id;
     },
-    async deleteQuestion(quizId, questionId){
-        const quiz = await Quiz.findById(quizId);
+    async deleteQuestion(quizName, questionId){
+        const quiz = await Quiz.findById(quizName);
         await quiz.questions.id(questionId).remove();
+
         quiz.questions.forEach((_, i) => {
-            quiz.questions[i].questionId = i+1; 
+            quiz.questions[i].questionId = i+1; //See previous comment
         });   
+
         await quiz.save();
         return quiz;
     },
-    async updateImg(quizId, questionId, path){
+    async updateImg(quizName, questionId, path){
         if(typeof path !== 'string'){
             throw new Error('new image path must be a string');
         }
-        const quiz = await Quiz.findById(quizId);
+        const quiz = await Quiz.findById(quizName);
         const question = quiz.questions.id(questionId);
         question.imgPath = path;
         await quiz.save();
         return quiz;
     },
-    async updateAnswers(quizId, questionId, answers){
+    async updateAnswers(quizName, questionId, answers){
         if(typeof answers !== 'object'){
             throw new Error('answers must be organized inside an object');
         }
-        const quiz = await Quiz.findById(quizId);
+        const quiz = await Quiz.findById(quizName);
         const question = quiz.questions.id(questionId);
         question.answers = answers;
         await quiz.save();
         return quiz;
     },
-    async updateCorrect(quizId, questionId, correct){
-        const quiz = await Quiz.findById(quizId);
+    async updateCorrect(quizName, questionId, correct){
+        const quiz = await Quiz.findById(quizName);
         const question = quiz.questions.id(questionId);
         question.correctAnswer = correct;
         await quiz.save();
         return quiz;
     },
-    async updateText(quizId, questionId, text){
-        const quiz = await Quiz.findById(quizId);
+    async updateText(quizName, questionId, text){
+        const quiz = await Quiz.findById(quizName);
         const question = quiz.questions.id(questionId);
         question.text = text;
         await quiz.save();

@@ -14,7 +14,7 @@ const isValidAnswer = el => {
 
 // ^^^ validation functions
 
-const questionSchema = new Schema({
+const questionSchema = new Schema({ // Potential data: How often do people miss, similar questions, relevant strategy
     questionId: {
         type: Number,
         trim: true,
@@ -44,10 +44,10 @@ const questionSchema = new Schema({
 });
 
 const quizSchema = new Schema({
-    quizId: {
+    quizName: {
         type: String,
         trim: true,
-        required: [true, 'A quiz id is required.']
+        required: [true, 'A quiz name is required.']
     },
     scoreScale: {
         type: Object

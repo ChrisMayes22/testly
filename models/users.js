@@ -1,18 +1,26 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
-    googleId: { //used to create / initially authenticate user. Comes from Google.
+const reportSchema = new Schema({
+    quizObject: { type: Schema.Types.ObjectId, ref: 'Quiz' },
+    quizName: String,
+    scores: [Number],
+    timesAttempted: Number,
+    missedQuestions: [[{ type: Schema.Types.ObjectId, ref: 'Quiz.questions' }]]
+})
+
+const userSchema = new Schema({ //Most user info comes from directly from google, so validation is minimal.
+    googleId: {
         type: String,
         required: [true, 'A Google id is required to create a user.']
     },
-    username: {
+    displayName: {
         type: String,
         required: [true, 'The user must have a username']
     },
-    roles: [{ //used to authorize user / grant user privileges. 
-        type: String
-    }]
+    roles: [{ type: String }], //used to authorize user / grant user privileges. 
+    completedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz' }],
+    scoreReports: [reportSchema]
 });
 
 const User = mongoose.model('User', userSchema);

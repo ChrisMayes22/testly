@@ -31,7 +31,7 @@
     "server": "env-cmd ./config/dev.env nodemon server.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "env-cmd ./config/test.env jest --watch"
+    "test": "env-cmd ./config/test.env jest --runInBand --watch"
   },
   "jest": {
     "testEnvironment": "node"

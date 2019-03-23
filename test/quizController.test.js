@@ -16,7 +16,7 @@ let question2 = {
     text: 'foo-text2'
 }
 let quiz = {
-    quizId: 'foo-quiz-id-one',
+    quizName: 'foo-quiz-id-one',
     scoreScale: {
         english: ['A', 'B', 'C-', 'D', 'D', 'D', 'F', 'F'],
         math: ['A', 'A', 'A-', 'B', 'B', 'C', 'D', 'F']
@@ -47,15 +47,15 @@ describe('Question Controller RESTful operations', () => {
     describe('When quizController.create is accessed', () => {
         test('Given valid input and coach auth is passed, a new question is created', async () => {
             await quizController.create(quiz);
-            const found = await Quiz.findOne({ quizId: quiz.quizId });
-            expect(found.quizId).toBe(quiz.quizId);
+            const found = await Quiz.findOne({ quizName: quiz.quizName });
+            expect(found.quizName).toBe(quiz.quizName);
         });
         test('Given template has no questions, method throws an error.', async () => {
             const invalidQuiz = { ...quiz, questions: [] };
             await expect(quizController.create(invalidQuiz)).rejects.toThrow();
         });
-        test('Given template has no quizId, method throws an error.', async () => {
-            const invalidQuiz = { ...quiz, quizId: undefined };
+        test('Given template has no quizName, method throws an error.', async () => {
+            const invalidQuiz = { ...quiz, quizName: undefined };
             await expect(quizController.create(invalidQuiz)).rejects.toThrow();
         });
         test('Given template question has no text, method throws an error.', async () => {
