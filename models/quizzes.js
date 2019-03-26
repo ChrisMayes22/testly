@@ -37,6 +37,10 @@ const questionSchema = new Schema({ // Potential data: How often do people miss,
         required: [true, 'Each question must have a specified correct answer'],
         validate: [isValidAnswer, 'correct answers should be a single latin lowercase character, most likely a-e.']
     },
+    recordedAnswer: {
+        type: String,
+        trime: true
+    },
     text: {
         type: String,
         required: [true, 'Each question must contain text']

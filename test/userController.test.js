@@ -24,7 +24,6 @@ afterEach(async function(){
 const profile = { googleId: '12346@#@aa', 
     displayName: 'Fieuline Bard', 
     roles: [], 
-    completedTests: []
 }
 const user = new User(profile);
 let question = {
@@ -169,73 +168,12 @@ describe('User CRUD operations', () => {
         });
     });
 });
-describe('completedQuizzes CRUD operations', () => {
-    describe('When userController.addCompletedQuiz is accessed', () => {
-        test('Given it is passed valid user id & quiz id, a quiz ref is stored on user & can be populated', async () => {
-            const user = new User(profile);
-            await user.save();
-            await quiz.save();
-
-            await userController.addCompletedQuiz(user._id, quiz._id);
-            const fetched = await User.findById(user._id).populate('completedQuizzes');
-
-            expect(fetched.completedQuizzes[0]._id).toEqual(quiz._id);
-            expect(fetched.completedQuizzes[0].quizId).toEqual(quiz.quizId);
-            expect(fetched.completedQuizzes[0].scoreScale).toEqual(quiz.scoreScale);
-        })
-        test('Given it is passed an invalid user id, method throws err', async () => {
-            const user = new User(profile);
-            await user.save();
-            await quiz.save();
-
-            await expect(userController.addCompletedQuiz(undefined, quiz._id)).rejects.toThrow();
-            await expect(userController.addCompletedQuiz('Not a user', quiz._id)).rejects.toThrow();
-        })
-        test('Given it is passed an invalid quiz id, method throws err', async () => {
-            const user = new User(profile);
-            await user.save();
-            await quiz.save();
-
-            await expect(userController.addCompletedQuiz(user._id, undefined)).rejects.toThrow();
-            await expect(userController.addCompletedQuiz(user._id, 'Not a quiz')).rejects.toThrow();
-        })
-    })
-    describe('When userController.removeCompletedQuiz is accessed', () => {
-        test('Given it is passed valid user id & quiz id, the corresponding quiz ref is removed', async () => {
-            await quiz.save();
-            const user = new User({...profile, completedQuizzes: quiz});
-            await user.save();
-            await userController.removeCompletedQuiz(user._id, quiz._id);
-            const fetched = await User.findById(user._id);
-            expect(fetched.completedQuizzes.length).toBe(user.completedQuizzes.length - 1);
-        })
-        test('Given it is passed an invalid user id, method throws err', async () => {
-            const user = new User(profile);
-            await user.save();
-            await quiz.save();
-
-            await expect(userController.removeCompletedQuiz(undefined, quiz._id)).rejects.toThrow();
-            await expect(userController.removeCompletedQuiz('Not a user', quiz._id)).rejects.toThrow();
-        })
-        test('Given it is passed an invalid quiz id, method throws err', async () => {
-            const user = new User(profile);
-            await user.save();
-            await quiz.save();
-
-            await expect(userController.addCompletedQuiz(user._id, undefined)).rejects.toThrow();
-            await expect(userController.addCompletedQuiz(user._id, 'Not a quiz')).rejects.toThrow();
-        })
-    })
-})
-
-
-
 describe('Score report management', () => {
     describe('When userController.addScoreReport is accessed', () => {
         test('Given valid inputs on a first-time test, a new score report is added', async () => {
-            const user = new User({...profile, completedQuizzes: [quiz], roles: ['user'] });
+            const user = new User({...profile, roles: ['user'] });
             await user.save();
-            await userController.addScoreReport(user._id, report1);
+            await userController.addReport(user._id, report1);
             const fetched = await User.findById(user._id);
             expect(fetched.scoreReports.length).toBe(1);
             expect(fetched.scoreReports[0].quizName).toBe(report1.quizName);
@@ -243,7 +181,6 @@ describe('Score report management', () => {
         test('Given valid inputs on a second attempt on a test, the existing score report is updated', async () => {
             const user = new User({
                 ...profile, 
-                completedQuizzes: [quiz], 
                 roles: ['user'],
                 scoreReports: [{
                     quizObject: quiz,
@@ -254,7 +191,7 @@ describe('Score report management', () => {
                 }]
             });
             await user.save();
-            await userController.addScoreReport(user._id, report2);
+            await userController.addReport(user._id, report2);
             const fetched = await User.findById(user._id);
             expect(fetched.scoreReports.length).toBe(1);
             expect(fetched.scoreReports[0].quizName).toBe(report1.quizName);
@@ -263,7 +200,6 @@ describe('Score report management', () => {
         test('Given attempts on multiple tests, one report per test is added', async () => {
             const user = new User({
                 ...profile, 
-                completedQuizzes: [quiz, quiz2], 
                 roles: ['user'],
                 scoreReports: [{
                     quizObject: quiz,
@@ -274,7 +210,7 @@ describe('Score report management', () => {
                 }]
             });
             await user.save();
-            await userController.addScoreReport(user._id, report3);
+            await userController.addReport(user._id, report3);
             const fetched = await User.findById(user._id);
             expect(fetched.scoreReports.length).toBe(2);
             expect(fetched.scoreReports[0].quizName).toBe(user.scoreReports[0].quizName);
@@ -285,7 +221,6 @@ describe('Score report management', () => {
         test('Given valid inputs & test was attempted only once, the target score report is deleted', async () => {
             const user = new User({
                 ...profile, 
-                completedQuizzes: [quiz], 
                 roles: ['user'],
                 scoreReports: [{
                     quizObject: quiz,
@@ -297,14 +232,13 @@ describe('Score report management', () => {
             });
             await user.save();
             const fetch1 = await User.findById(user._id);
-            await userController.deleteScoreReport(user._id, fetch1.scoreReports[0]._id, 0);
+            await userController.deleteReportByIndex(user._id, fetch1.scoreReports[0]._id, 0);
             const fetch2 = await User.findById(user._id);
             expect(fetch2.scoreReports.length).toBe(0);
         });
         test('Given valid inputs & test was attempted multiple times, the target score report is updated', async () => {
             const user = new User({
                 ...profile, 
-                completedQuizzes: [quiz], 
                 roles: ['user'],
                 scoreReports: [{
                     quizObject: quiz2,
@@ -319,7 +253,7 @@ describe('Score report management', () => {
             });
             await user.save();
             const fetch1 = await User.findById(user._id);
-            await userController.deleteScoreReport(user._id, fetch1.scoreReports[0]._id, 0);
+            await userController.deleteReportByIndex(user._id, fetch1.scoreReports[0]._id, 0);
             const fetch2 = await User.findById(user._id);
             expect(fetch2.scoreReports.length).toBe(1);
             expect(fetch2.scoreReports[0].missedQuestions.length).toBe(1);
@@ -333,7 +267,7 @@ describe('Score report management', () => {
             expect(quiz2.questions.id(fetchQuestionOId).questionId)
                 .toBe(quiz2.questions.id(originalQuestionOId).questionId);
                 // Since deleteScoreReport deletes question @ index 1, 
-                //old index 1 question should be new index 0 question.
+                // old index 1 question should be new index 0 question.
             
         });
     });

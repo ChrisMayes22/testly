@@ -19,9 +19,10 @@ const userSchema = new Schema({ //Most user info comes from directly from google
         required: [true, 'The user must have a username']
     },
     roles: [{ type: String }], //used to authorize user / grant user privileges. 
-    completedQuizzes: [{ type: Schema.Types.ObjectId, ref: 'Quiz' }],
     scoreReports: [reportSchema]
 });
+
+//Make sure to only ask for the necessary data
 
 const User = mongoose.model('User', userSchema);
 

@@ -22,7 +22,8 @@ passport.use(new GoogleStrategy({
     clientID:     GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: "/auth/google/callback",
-    passReqToCallback: true
+    passReqToCallback: true,
+    proxy: true
   },
   userController.create
 ));

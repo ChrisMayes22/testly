@@ -1,14 +1,30 @@
 require('../db/mongoose');
 const User = require('../models/users');
-const Quiz = require('../models/quizzes');
+const keys = require('../config/keys');
 
 module.exports = {
-    async create(request, accessToken, refreshToken, profile) { //used in /services/passport.js 
-        const existingUser = await User.findOne({ googleId: profile.googleId});
+    async create(request, accessToken, refreshToken, profile, done) { //used in /services/passport.js 
+        const existingUser = await User.findOne({ googleId: profile.id });
         if(!existingUser) {
-            const newUser = new User({ googleId: profile.googleId, displayName: profile.displayName});
+            const newUser = new User({ 
+                googleId: profile.id, 
+                displayName: profile.displayName,
+                roles: ['user']
+            });
+            keys.COACH_IDS.forEach(char => {
+                if(char === profile.id){
+                    newUser.roles.push('coach')
+                }
+            });
+            keys.ADMIN_IDS.forEach(char => {
+                if(char === profile.id){
+                    newUser.roles.push('admin');
+                }
+            });
             await newUser.save();
+            done(null, newUser);
         }
+        done(null, existingUser);
     },
     async delete(id) {
         await User.findByIdAndDelete(id);
@@ -31,31 +47,7 @@ module.exports = {
     async demoteAdmin(id){
         await User.findByIdAndUpdate(id, { $pull: { roles: 'admin' }});
     },
-    async addCompletedQuiz(userId, quizId){
-        if(!quizId._bsontype){
-            throw new Error('Something went wrong with the quiz ID. Err: quizId not of correct type')
-        }
-        const user = await User.findById(userId);
-        const quiz = await Quiz.findById(quizId);
-        user.completedQuizzes.push(quiz);
-        await user.save();
-        return quiz;
-    },
-    async removeCompletedQuiz(userId, quizId){
-        if(!userId._bsontype){
-            throw new Error('Something went wrong with the quiz or user ID. Err: userId not of the correct type')
-        }
-        const user = await User.findByIdAndUpdate(userId, { $pull: { completedQuizzes: quizId }});
-        return user;
-    },
-    async removeCompletedQuiz(userId, quizId){
-        if(!userId._bsontype){
-            throw new Error('Something went wrong with the quiz or user ID. Err: userId not of the correct type')
-        }
-        const user = await User.findByIdAndUpdate(userId, { $pull: { completedQuizzes: quizId }});
-        return user;
-    },
-    async addScoreReport(userId, report){
+    async addReport(userId, report){
         const user = await User.findById(userId);
         const quiz = user.scoreReports.find(quiz => quiz.quizName === report.quizName);
         if(!quiz){
@@ -77,11 +69,11 @@ module.exports = {
         await user.save();
         return user;
     },
-    async deleteScoreReport(userId, reportId, index){
+    async deleteReportByIndex(userId, reportId, index){
         const user = await User.findById(userId);
         const report = user.scoreReports.id(reportId);
         if(report.timesAttempted === 1){
-            user.scoreReports.id(reportId).remove();
+            report.remove();
             await user.save();
             return user;
         }
