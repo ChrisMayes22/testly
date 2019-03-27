@@ -3,7 +3,7 @@ const User = require('../models/users');
 const keys = require('../config/keys');
 
 module.exports = {
-    async create(request, accessToken, refreshToken, profile, done) { //used in /services/passport.js 
+    async create(profile) { //used in /services/passport.js 
         const existingUser = await User.findOne({ googleId: profile.id });
         if(!existingUser) {
             const newUser = new User({ 
@@ -22,9 +22,9 @@ module.exports = {
                 }
             });
             await newUser.save();
-            done(null, newUser);
+            return newUser;
         }
-        done(null, existingUser);
+        return existingUser;;
     },
     async delete(id) {
         await User.findByIdAndDelete(id);

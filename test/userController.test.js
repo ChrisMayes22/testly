@@ -25,6 +25,10 @@ const profile = { googleId: '12346@#@aa',
     displayName: 'Fieuline Bard', 
     roles: [], 
 }
+const profileId = { id: '12346@#@aa', 
+    displayName: 'Fieuline Bard', 
+    roles: [], 
+}
 const user = new User(profile);
 let question = {
     questionId: 1,
@@ -92,13 +96,13 @@ describe('Test Setup', () => {
 describe('User CRUD operations', () => {
     describe('When userController.create is accessed', () => {
         test('Given a valid google profile, a new user is created', async () => {
-            await userController.create(null, null, null, profile);
+            await userController.create(profileId);
             const found = await User.findOne({ googleId: profile.googleId });
             expect(found.displayName).toBe(profile.displayName);
         });
         test('Given the google profile already exists, the id is not duplicated on the database', async () => {
-            await userController.create(null, null, null, profile);
-            await userController.create(null, null, null, profile);
+            await userController.create(profileId);
+            await userController.create(profileId);
             const found = await User.find({ googleId: profile.googleId });
             expect(found.length).toBe(1);
         });

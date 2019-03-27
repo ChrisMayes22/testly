@@ -25,7 +25,10 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true,
     proxy: true
   },
-  userController.create
+  async (request, accessToken, refreshToken, profile, done) => {
+    const user = await userController.create(profile);
+    done(null, user);
+  }
 ));
 
 
