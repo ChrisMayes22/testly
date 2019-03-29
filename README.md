@@ -29,10 +29,10 @@ By the time this step is implemented, the Testly interface will be able to rende
 
 Each step will be completed following TDD, with a high degree of unit test coverage for each implementation.
 
-#Screen Shots
+# Screen Shots
 
 **Landing Page**
-![Landing Page for Testly App][https://i.imgur.com/AQ95qia.jpg]
+![Landing Page for Testly App](https://i.imgur.com/AQ95qia.jpg)
 
 # Tech & Frameworks
 
