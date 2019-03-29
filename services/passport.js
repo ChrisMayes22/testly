@@ -1,3 +1,8 @@
+/**
+ * Passport Module
+ * @module services/passport
+ */
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mongoose = require('mongoose');
@@ -8,7 +13,7 @@ const User = mongoose.model('User');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
-}) // puts user id into a session cookie that is sent to user. Session contents are encrypted.
+})
 
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
@@ -16,8 +21,6 @@ passport.deserializeUser((id, done) => {
     }) // takes a session cookie from user and turns it into a user id.
 })
 
-
-//Sets up Google OAuth
 passport.use(new GoogleStrategy({
     clientID:     GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
@@ -25,6 +28,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true,
     proxy: true
   },
+
   async (request, accessToken, refreshToken, profile, done) => {
     const user = await userController.create(profile);
     done(null, user);
