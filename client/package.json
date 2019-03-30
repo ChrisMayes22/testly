@@ -118,8 +118,8 @@
       "node"
     ],
     "watchPlugins": [
-      "C:\\Users\\cpmay\\Desktop\\Coding\\work-related\\tac-express\\client\\node_modules\\jest-watch-typeahead\\filename.js",
-      "C:\\Users\\cpmay\\Desktop\\Coding\\work-related\\tac-express\\client\\node_modules\\jest-watch-typeahead\\testname.js"
+      "/home/chris-m/coding/OAuth-Test/client/node_modules/jest-watch-typeahead/filename.js",
+      "/home/chris-m/coding/OAuth-Test/client/node_modules/jest-watch-typeahead/testname.js"
     ]
   },
   "babel": {
