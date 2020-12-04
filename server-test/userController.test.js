@@ -87,12 +87,12 @@ const report3 = {
 
 /* TEST SUITES */
 
-describe('Test Setup', () => {
-    test('test environment variables configured correctly', () => {
-        expect(process.env.PORT).toBe('5000');
-        expect(process.env.MONGO_URI).toBe('mongodb://127.0.0.1:27017/testly__TEST');
-    });
-});
+// describe('Test Setup', () => {
+//     test('test environment variables configured correctly', () => {
+//         expect(process.env.PORT).toBe('5000');
+//         expect(process.env.MONGO_URI).toBe('mongodb://127.0.0.1:27017/testly__TEST');
+//     });
+// });
 describe('User CRUD operations', () => {
     describe('When userController.create is accessed', () => {
         test('Given a valid google profile, a new user is created', async () => {

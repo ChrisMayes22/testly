@@ -11,8 +11,13 @@ router.get('/logout', (req, res, next) => {
 })
 
 router.get('/current_user', async (req, res, next) => {
-    const currentUser = await User.findById(req.session.passport.user);
-    res.send(currentUser);
+    console.log('SESSION', req.session)
+    if(!req.session.passport){
+        res.send(false)
+    } else {
+        const currentUser = await User.findById(req.session.passport.user);
+        res.send(currentUser);
+    }
 })
 
 module.exports = router;

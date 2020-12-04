@@ -55,7 +55,7 @@ app.use(function(err, req, res, next) {
   res.send(`err: ${err.message}`);
 });
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 5000
 
 console.log(`Express server listening at ${PORT}`)
 app.listen(PORT);

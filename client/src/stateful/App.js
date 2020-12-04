@@ -14,7 +14,7 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <Route path="/" component={Header} />
-                    <Route  component={() => '404 not found'} />
+                    {/* <Route  component={() => '404 not found'} /> */}
                 </div>
             </BrowserRouter>
         )

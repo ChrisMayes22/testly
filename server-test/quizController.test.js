@@ -37,12 +37,12 @@ afterEach(async function(){
     }
 })
 
-describe('Test Setup', () => {
-    test('test environment variables configured correctly', () => {
-        expect(process.env.PORT).toBe('5000');
-        expect(process.env.MONGO_URI).toBe('mongodb://127.0.0.1:27017/testly__TEST');
-    });
-});
+// describe('Test Setup', () => {
+//     test('test environment variables configured correctly', () => {
+//         expect(process.env.PORT).toBe('5000');
+//         expect(process.env.MONGO_URI).toBe('mongodb://127.0.0.1:27017/testly__TEST');
+//     });
+// });
 describe('Question Controller RESTful operations', () => {
     describe('When quizController.create is accessed', () => {
         test('Given valid input and coach auth is passed, a new question is created', async () => {

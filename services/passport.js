@@ -12,7 +12,8 @@ const userController = require('../controllers/user-controller');
 const User = mongoose.model('User');
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  console.log('SERIALIZING USER')
+  done(null, user);
 })
 
 passport.deserializeUser((id, done) => {
